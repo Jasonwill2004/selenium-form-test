@@ -1,5 +1,6 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
+const fs = require('fs').promises;
 
 (async function submitFormTest() {
   const driver = await new Builder().forBrowser('firefox').setFirefoxOptions(new firefox.Options()).build();
@@ -18,6 +19,9 @@ const firefox = require('selenium-webdriver/firefox');
 
     if (message.includes('Received!')) {
       console.log('✅ Form submitted successfully and success message received!');
+      const screenshot = await driver.takeScreenshot();
+      await fs.writeFile('test-execution.png', screenshot, 'base64');
+      console.log('📸 Screenshot saved as test-execution.png');
     } else {
       console.log('❌ Unexpected message:', message);
     }
